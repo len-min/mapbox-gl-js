@@ -150,12 +150,19 @@ class LineBucket implements Bucket {
         const miterLimit = layout.get('line-miter-limit');
         const roundLimit = layout.get('line-round-limit');
 
-        for (const line of geometry) {
-            this.addLine(line, feature, join, cap, miterLimit, roundLimit);
+        for (let i = 0; i < geometry.length; i++) {
+            const line = geometry[i];
+            this.addLine(line, feature, join, cap, miterLimit, roundLimit, i);
         }
     }
 
-    addLine(vertices: Array<Point>, feature: VectorTileFeature, join: string, cap: string, miterLimit: number, roundLimit: number) {
+    addLine(vertices: Array<Point>, feature: VectorTileFeature, join: string, cap: string, miterLimit: number, roundLimit: number, index: number) {
+        if (feature.properties.distances) {
+            this.scaleDistance = true;
+            // TODO obviously mutating bucket on each feature not ideal, but for now:
+            this.totalLineDistance = feature.properties.distances[index][0];
+            this.tileStartDistance = feature.properties.distances[index][1];
+        }
         const isPolygon = vectorTileFeatureTypes[feature.type] === 'Polygon';
 
         // If the line has duplicate vertices at the ends, adjust start/length to remove them.
@@ -442,9 +449,11 @@ class LineBucket implements Bucket {
         const layoutVertexArray = this.layoutVertexArray;
         const indexArray = this.indexArray;
 
+        let transformedDistance = this.transformDistance(distance);
+
         extrude = normal.clone();
         if (endLeft) extrude._sub(normal.perp()._mult(endLeft));
-        addLineVertex(layoutVertexArray, currentVertex, extrude, round, false, endLeft, distance);
+        addLineVertex(layoutVertexArray, currentVertex, extrude, round, false, endLeft, transformedDistance);
         this.e3 = segment.vertexLength++;
         if (this.e1 >= 0 && this.e2 >= 0) {
             indexArray.emplaceBack(this.e1, this.e2, this.e3);
@@ -455,7 +464,7 @@ class LineBucket implements Bucket {
 
         extrude = normal.mult(-1);
         if (endRight) extrude._sub(normal.perp()._mult(endRight));
-        addLineVertex(layoutVertexArray, currentVertex, extrude, round, true, -endRight, distance);
+        addLineVertex(layoutVertexArray, currentVertex, extrude, round, true, -endRight, transformedDistance);
         this.e3 = segment.vertexLength++;
         if (this.e1 >= 0 && this.e2 >= 0) {
             indexArray.emplaceBack(this.e1, this.e2, this.e3);
@@ -468,7 +477,7 @@ class LineBucket implements Bucket {
         // When we get close to the distance, reset it to zero and add the vertex again with
         // a distance of zero. The max distance is determined by the number of bits we allocate
         // to `linesofar`.
-        if (distance > MAX_LINE_DISTANCE / 2) {
+        if (distance > MAX_LINE_DISTANCE / 2 && !this.scaleDistance) {
             this.distance = 0;
             this.addCurrentVertex(currentVertex, this.distance, normal, endLeft, endRight, round, segment);
         }
@@ -493,7 +502,7 @@ class LineBucket implements Bucket {
         const layoutVertexArray = this.layoutVertexArray;
         const indexArray = this.indexArray;
 
-        addLineVertex(layoutVertexArray, currentVertex, extrude, false, lineTurnsLeft, 0, distance);
+        addLineVertex(layoutVertexArray, currentVertex, extrude, false, lineTurnsLeft, 0, this.transformDistance(distance));
         this.e3 = segment.vertexLength++;
         if (this.e1 >= 0 && this.e2 >= 0) {
             indexArray.emplaceBack(this.e1, this.e2, this.e3);
@@ -505,6 +514,11 @@ class LineBucket implements Bucket {
         } else {
             this.e1 = this.e3;
         }
+    }
+
+    transformDistance(tileDistance: number) {
+        if (!this.scaleDistance) return tileDistance;
+        return (this.tileStartDistance + tileDistance) * ((MAX_LINE_DISTANCE - 1) / this.totalLineDistance);
     }
 }
 

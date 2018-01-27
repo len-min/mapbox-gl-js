@@ -15,6 +15,7 @@ const {
 import type Color from '../../style-spec/util/color';
 
 export type LayoutProps = {|
+    "line-gradient": DataConstantProperty<boolean>,
     "line-cap": DataConstantProperty<"butt" | "round" | "square">,
     "line-join": DataDrivenProperty<"bevel" | "round" | "miter">,
     "line-miter-limit": DataConstantProperty<number>,
@@ -22,6 +23,7 @@ export type LayoutProps = {|
 |};
 
 const layout: Properties<LayoutProps> = new Properties({
+    "line-gradient": new DataConstantProperty(styleSpec["layout_line"]["line-gradient"]),
     "line-cap": new DataConstantProperty(styleSpec["layout_line"]["line-cap"]),
     "line-join": new DataDrivenProperty(styleSpec["layout_line"]["line-join"]),
     "line-miter-limit": new DataConstantProperty(styleSpec["layout_line"]["line-miter-limit"]),

@@ -698,6 +698,10 @@
     }
   },
   "layout_line": {
+    "line-gradient": {
+      "type": "boolean",
+      "default": "false"
+    },
     "line-cap": {
       "type": "enum",
       "function": "piecewise-constant",
