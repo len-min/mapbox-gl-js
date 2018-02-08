@@ -112,21 +112,20 @@ function drawLineTile(program, painter, tile, bucket, layer, coord, programConfi
         }
     }
 
-    context.setStencilMode(layer.layout.get('line-gradient') ?
-        StencilMode.disabled :
-        painter.stencilModeForClipping(coord));
+    const hasGradient = !!layer.paint.get('line-gradient');
+
+    context.setStencilMode(hasGradient ? StencilMode.disabled : painter.stencilModeForClipping(coord));
 
     const posMatrix = painter.translatePosMatrix(coord.posMatrix, tile, layer.paint.get('line-translate'), layer.paint.get('line-translate-anchor'));
     gl.uniformMatrix4fv(program.uniforms.u_matrix, false, posMatrix);
 
     gl.uniform1f(program.uniforms.u_ratio, 1 / pixelsToTileUnits(tile, 1, painter.transform.zoom));
 
-    const hasGradient = !!layer.paint.get('line-gradient');
-
     if (hasGradient) {
         context.activeTexture.set(gl.TEXTURE0);
 
         let gradientTexture = layer.gradientTexture;
+        if (!layer.gradient) return;
         if (!gradientTexture) gradientTexture = layer.gradientTexture = new Texture(context, layer.gradient, gl.RGBA);
         gradientTexture.bind(gl.LINEAR, gl.CLAMP_TO_EDGE);
 

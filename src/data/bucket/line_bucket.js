@@ -158,7 +158,8 @@ class LineBucket implements Bucket {
 
     addLine(vertices: Array<Point>, feature: VectorTileFeature, join: string, cap: string, miterLimit: number, roundLimit: number, index: number) {
         let lineDistances = null;
-        if (feature.properties.$distances &&
+        if (!!feature.properties &&
+            Array.isArray(feature.properties.$distances) &&
             index < feature.properties.$distances.length &&
             feature.properties.$distances[index].length === 2) {
             const distances = feature.properties.$distances[index];
@@ -454,7 +455,14 @@ class LineBucket implements Bucket {
         const layoutVertexArray = this.layoutVertexArray;
         const indexArray = this.indexArray;
 
-        if (distancesForScaling) distance = this.transformDistance(distance, distancesForScaling);
+        if (distancesForScaling) {
+            distance = this.scaleDistance(distance, distancesForScaling);
+            if (this.shouldClipEdges(currentVertex, distance)) {
+                round = false;
+                endLeft = 0;
+                endRight = 0;
+            }
+        }
 
         extrude = normal.clone();
         if (endLeft) extrude._sub(normal.perp()._mult(endLeft));
@@ -508,7 +516,7 @@ class LineBucket implements Bucket {
         const layoutVertexArray = this.layoutVertexArray;
         const indexArray = this.indexArray;
 
-        if (distancesForScaling) distance = this.transformDistance(distance, distancesForScaling);
+        if (distancesForScaling) distance = this.scaleDistance(distance, distancesForScaling);
 
         addLineVertex(layoutVertexArray, currentVertex, extrude, false, lineTurnsLeft, 0, distance);
         this.e3 = segment.vertexLength++;
@@ -524,8 +532,17 @@ class LineBucket implements Bucket {
         }
     }
 
-    transformDistance(tileDistance: number, stats: Object) {
+    scaleDistance(tileDistance: number, stats: Object) {
         return (stats.start + tileDistance) * ((MAX_LINE_DISTANCE - 1) / stats.total);
+    }
+
+    shouldClipEdges(vertex: Point, distance: number): boolean {
+        // We detect non-start/end tile edge vertices for gradient lines because
+        // we turn clipping off when there's no tile buffer (which we do in
+        // order to calcuate line distances correctly), and turn these into butt
+        // ends so they won't overlap with semitransparent neighbors.
+        if (distance === 0 || distance === MAX_LINE_DISTANCE - 1) return false;
+        return vertex.x === 0 || vertex.x === EXTENT || vertex.y === 0 || vertex.y === EXTENT;
     }
 }
 
