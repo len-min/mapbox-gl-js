@@ -6,7 +6,7 @@ const now = window.performance && window.performance.now ?
     window.performance.now.bind(window.performance) :
     Date.now.bind(Date);
 
-const frame = window.requestAnimationFrame ||
+const raf = window.requestAnimationFrame ||
     window.mozRequestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
     window.msRequestAnimationFrame;
@@ -27,7 +27,7 @@ const exported = {
     now,
 
     frame(fn: Function) {
-        return frame(fn);
+        return raf(fn);
     },
 
     cancelFrame(id: number) {
@@ -65,6 +65,6 @@ export const {
 
 const webpImgTest = window.document.createElement('img');
 webpImgTest.onload = function() {
-    export const supportsWebp = true;
+    exported.supportsWebp = true;
 };
 webpImgTest.src = 'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAQAAAAfQ//73v/+BiOh/AAA=';

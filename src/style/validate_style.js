@@ -1,3 +1,5 @@
+// @flow
+
 export default require('../style-spec/validate_style.min');
 
 import type Evented from '../util/evented';

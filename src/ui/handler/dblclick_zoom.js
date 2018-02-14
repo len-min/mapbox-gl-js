@@ -1,6 +1,4 @@
-// @flow
-
-import util from '../../util/util';
+import { bindAll } from '../../util/util';
 
 import type Map from '../map';
 
@@ -18,7 +16,7 @@ class DoubleClickZoomHandler {
     constructor(map: Map) {
         this._map = map;
 
-        util.bindAll([
+        bindAll([
             '_onDblClick',
             '_onZoomEnd'
         ], this);

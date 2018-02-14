@@ -8,6 +8,7 @@ import Literal from './definitions/literal';
 import Assertion from './definitions/assertion';
 import ArrayAssertion from './definitions/array';
 import Coercion from './definitions/coercion';
+import EvaluationContext from './evaluation_context';
 
 import type {Expression, ExpressionRegistry} from './expression';
 import type {Type} from './types';
@@ -113,7 +114,7 @@ class ParsingContext {
                 // it immediately and replace it with a literal value in the
                 // parsed/compiled result.
                 if (!(parsed instanceof Literal) && isConstant(parsed)) {
-                    const ec = new (require('./evaluation_context'))();
+                    const ec = new EvaluationContext();
                     try {
                         parsed = new Literal(parsed.type, parsed.evaluate(ec));
                     } catch (e) {

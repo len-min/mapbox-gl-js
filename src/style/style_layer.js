@@ -1,7 +1,4 @@
-// @flow
-
-
-import util from '../util/util';
+import { endsWith, filterObject } from '../util/util';
 
 import styleSpec from '../style-spec/reference/latest';
 import validateStyle from './validate_style';
@@ -105,7 +102,7 @@ class StyleLayer extends Evented {
     }
 
     getPaintProperty(name: string) {
-        if (util.endsWith(name, TRANSITION_SUFFIX)) {
+        if (endsWith(name, TRANSITION_SUFFIX)) {
             return this._transitionablePaint.getTransition(name.slice(0, -TRANSITION_SUFFIX.length));
         } else {
             return this._transitionablePaint.getValue(name);
@@ -120,7 +117,7 @@ class StyleLayer extends Evented {
             }
         }
 
-        if (util.endsWith(name, TRANSITION_SUFFIX)) {
+        if (endsWith(name, TRANSITION_SUFFIX)) {
             this._transitionablePaint.setTransition(name.slice(0, -TRANSITION_SUFFIX.length), (value: any) || undefined);
         } else {
             this._transitionablePaint.setValue(name, value);
@@ -168,7 +165,7 @@ class StyleLayer extends Evented {
             output.layout.visibility = 'none';
         }
 
-        return util.filterObject(output, (value, key) => {
+        return filterObject(output, (value, key) => {
             return value !== undefined &&
                 !(key === 'layout' && !Object.keys(value).length) &&
                 !(key === 'paint' && !Object.keys(value).length);
@@ -205,26 +202,26 @@ export const {
     create
 } = StyleLayer;
 
-import './style_layer/circle_style_layer';
-import './style_layer/heatmap_style_layer';
-import './style_layer/hillshade_style_layer';
-import './style_layer/fill_style_layer';
-import './style_layer/fill_extrusion_style_layer';
-import './style_layer/line_style_layer';
-import './style_layer/symbol_style_layer';
-import './style_layer/background_style_layer';
-import './style_layer/raster_style_layer';
+import circle from './style_layer/circle_style_layer';
+import heatmap from './style_layer/heatmap_style_layer';
+import hillshade from './style_layer/hillshade_style_layer';
+import fill from './style_layer/fill_style_layer';
+import fillExtrusion from './style_layer/fill_extrusion_style_layer';
+import line from './style_layer/line_style_layer';
+import symbol from './style_layer/symbol_style_layer';
+import background from './style_layer/background_style_layer';
+import raster from './style_layer/raster_style_layer';
 
 const subclasses = {
-    'circle',
-    'heatmap',
-    'hillshade',
-    'fill',
-    'fill-extrusion',
-    'line',
-    'symbol',
-    'background',
-    'raster'
+    circle,
+    heatmap,
+    hillshade,
+    fill,
+    'fill-extrusion': fillExtrusion,
+    line,
+    symbol,
+    background,
+    raster
 };
 
 StyleLayer.create = function(layer: LayerSpecification) {

@@ -1,6 +1,4 @@
-// @flow
-
-import util from '../util/util';
+import { bindAll } from '../util/util';
 
 import window from '../util/window';
 import throttle from '../util/throttle';
@@ -18,7 +16,7 @@ class Hash {
     _updateHash: () => number;
 
     constructor() {
-        util.bindAll([
+        bindAll([
             '_onHashChange',
             '_updateHash'
         ], this);

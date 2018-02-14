@@ -1,7 +1,7 @@
 // @flow
 
 import { getImage, ResourceType } from '../util/ajax';
-import util from '../util/util';
+import { extend } from '../util/util';
 import Evented from '../util/evented';
 import { normalizeTileURL as normalizeURL } from '../util/mapbox';
 import browser from '../util/browser';
@@ -19,7 +19,7 @@ class RasterDEMTileSource extends RasterTileSource implements Source {
         super(id, options, dispatcher, eventedParent);
         this.type = 'raster-dem';
         this.maxzoom = 22;
-        this._options = util.extend({}, options);
+        this._options = extend({}, options);
     }
 
     serialize() {
