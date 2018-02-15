@@ -1,3 +1,4 @@
+// @flow
 import { bindAll } from './util';
 
 import { serialize, deserialize } from './web_worker_transfer';

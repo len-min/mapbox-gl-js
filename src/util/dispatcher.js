@@ -1,3 +1,4 @@
+// @flow
 import { uniqueId, asyncAll } from './util';
 
 import Actor from './actor';

@@ -1,3 +1,4 @@
+// @flow
 import { endsWith, filterObject } from '../util/util';
 
 import styleSpec from '../style-spec/reference/latest';

@@ -1,3 +1,4 @@
+// @flow
 import { extend, endsWith } from './util';
 
 type Listener = (Object) => any;

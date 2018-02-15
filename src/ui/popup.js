@@ -1,3 +1,4 @@
+// @flow
 import { extend, bindAll } from '../util/util';
 
 import Evented from '../util/evented';

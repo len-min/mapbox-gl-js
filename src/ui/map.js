@@ -1,3 +1,5 @@
+// @flow
+
 import { extend, bindAll, warnOnce } from '../util/util';
 
 import browser from '../util/browser';

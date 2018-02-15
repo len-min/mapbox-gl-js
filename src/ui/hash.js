@@ -1,3 +1,4 @@
+// @flow
 import { bindAll } from '../util/util';
 
 import window from '../util/window';

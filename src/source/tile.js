@@ -1,3 +1,4 @@
+// @flow
 import { uniqueId, deepEqual, parseCacheControl } from '../util/util';
 
 import { deserialize as deserializeBucket } from '../data/bucket';

@@ -1,3 +1,4 @@
+// @flow
 import { extend, deepEqual, warnOnce, clamp, wrap } from '../util/util';
 
 import { number as interpolate } from '../style-spec/util/interpolate';
