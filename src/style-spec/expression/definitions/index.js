@@ -208,7 +208,7 @@ CompoundExpression.register(expressions, {
     'line-progress': [
         NumberType,
         [],
-        (ctx) => ctx.globals.lineProgress || 1
+        (ctx) => ctx.globals.lineProgress || 0
     ],
     '+': [
         NumberType,
