@@ -198,6 +198,10 @@
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.0.0.tgz#c1de4293081424da3ac30c23afa850af1019bb54"
 
+"@std/esm@^0.21.7":
+  version "0.21.7"
+  resolved "https://registry.yarnpkg.com/@std/esm/-/esm-0.21.7.tgz#492d7931aed03e91a133deac4d9062fbfce5fd6b"
+
 "@types/node@*":
   version "8.0.34"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.34.tgz#55f801fa2ddb2a40dd6dfc15ecfe1dde9c129fe9"
@@ -2471,7 +2475,7 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
 
-concat-stream@^1.4.6, concat-stream@^1.4.7, concat-stream@^1.5.0, concat-stream@^1.6.0, concat-stream@~1.6.0:
+concat-stream@^1.4.6, concat-stream@^1.4.7, concat-stream@^1.5.0, concat-stream@^1.5.1, concat-stream@^1.6.0, concat-stream@~1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-1.6.0.tgz#0aac662fd52be78964d5532f694784e70110acf7"
   dependencies:
@@ -8799,6 +8803,15 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^2.0.0"
     inherits "^2.0.1"
 
+rollup-plugin-browserify-transform@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-browserify-transform/-/rollup-plugin-browserify-transform-1.0.1.tgz#97cd596d5cb14d7fdb43da970b6c3a309a6d81e9"
+  dependencies:
+    concat-stream "^1.5.1"
+    object-assign "^4.0.1"
+    rollup-pluginutils "^2.0.1"
+    source-map-url "^0.4.0"
+
 rollup-plugin-buble@^0.18.0:
   version "0.18.0"
   resolved "https://registry.yarnpkg.com/rollup-plugin-buble/-/rollup-plugin-buble-0.18.0.tgz#6e20d1b2840c59eb496b9f954f75243e51786ac1"
@@ -8823,10 +8836,21 @@ rollup-plugin-flow@^1.1.1:
     flow-remove-types "^1.1.0"
     rollup-pluginutils "^1.5.1"
 
-rollup-plugin-node-resolve@^3.0.0:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-node-resolve/-/rollup-plugin-node-resolve-3.0.2.tgz#38babc12fd404cc2ba1ff68648fe43fa3ffee6b0"
+rollup-plugin-graph@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-graph/-/rollup-plugin-graph-1.2.0.tgz#3039cc5e1d7dfe8c46e7a25535e97c6064ecc0a8"
+
+rollup-plugin-json@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-json/-/rollup-plugin-json-2.3.0.tgz#3c07a452c1b5391be28006fbfff3644056ce0add"
   dependencies:
+    rollup-pluginutils "^2.0.1"
+
+rollup-plugin-node-resolve@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-node-resolve/-/rollup-plugin-node-resolve-3.0.0.tgz#8b897c4c3030d5001277b0514b25d2ca09683ee0"
+  dependencies:
+    browser-resolve "^1.11.0"
     builtin-modules "^1.1.0"
     is-module "^1.0.0"
     resolve "^1.1.6"

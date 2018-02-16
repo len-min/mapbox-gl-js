@@ -1,5 +1,5 @@
 // @flow
-import { extend, deepEqual, warnOnce, clamp, wrap } from '../util/util';
+import { extend, deepEqual, warnOnce, clamp, wrap, ease as defaultEasing } from '../util/util';
 
 import { number as interpolate } from '../style-spec/util/interpolate';
 import browser from '../util/browser';
@@ -533,7 +533,7 @@ class Camera extends Evented {
         options = extend({
             offset: [0, 0],
             duration: 500,
-            easing: util.ease
+            easing: defaultEasing
         }, options);
 
         if (options.animate === false) options.duration = 0;
@@ -721,7 +721,7 @@ class Camera extends Evented {
             offset: [0, 0],
             speed: 1.2,
             curve: 1.42,
-            easing: util.ease
+            easing: defaultEasing
         }, options);
 
         const tr = this.transform,
