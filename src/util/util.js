@@ -258,7 +258,7 @@ export function getCoordinatesCenter(coords: Array<Coordinate>): Coordinate {
  */
 export function endsWith(string: string, suffix: string): boolean {
     return string.indexOf(suffix, string.length - suffix.length) !== -1;
-};
+}
 
 /**
  * Create an object by mapping all the values of an existing object while
@@ -299,7 +299,7 @@ export { deepEqual };
  */
 export function clone<T>(input: T): T {
     if (Array.isArray(input)) {
-        return input.map(exports.clone);
+        return input.map(clone);
     } else if (typeof input === 'object' && input) {
         return ((mapObject(input, clone): any): T);
     } else {

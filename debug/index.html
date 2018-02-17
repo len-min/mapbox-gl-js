@@ -14,10 +14,17 @@
 <body>
 <div id='map'></div>
 
-<script src='/dist/mapbox-gl-dev.js'></script>
+<script>
+    console.time('load bundle')
+</script>
+<script src='/dist/mapboxgl-rollup.js'></script>
+<script>
+    console.timeEnd('load bundle')
+</script>
 <script src='/debug/access_token_generated.js'></script>
 <script>
 
+console.time('load map')
 var map = window.map = new mapboxgl.Map({
     container: 'map',
     zoom: 12.5,
@@ -25,6 +32,9 @@ var map = window.map = new mapboxgl.Map({
     style: 'mapbox://styles/mapbox/streets-v10',
     hash: true
 });
+map.once('load', () => {
+    console.timeEnd('load map');
+})
 
 </script>
 </body>

@@ -19,9 +19,12 @@ DOM.createNS = function (namespaceURI: string, tagName: string) {
     return el;
 };
 
-const docStyle = (window.document.documentElement: any).style;
+const docStyle = window.document ?
+    (window.document.documentElement: any).style :
+    null;
 
 function testProp(props) {
+    if (!docStyle) return null;
     for (let i = 0; i < props.length; i++) {
         if (props[i] in docStyle) {
             return props[i];

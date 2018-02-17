@@ -53,18 +53,18 @@ const exported = {
 
 export default exported;
 export { now };
-
 export const {
     frame,
     cancelFrame,
     getImageData,
     hardwareConcurrency,
-    devicePixelRatio,
-    supportsWebp
+    devicePixelRatio
 } = exported;
 
-const webpImgTest = window.document.createElement('img');
-webpImgTest.onload = function() {
-    exported.supportsWebp = true;
-};
-webpImgTest.src = 'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAQAAAAfQ//73v/+BiOh/AAA=';
+if (window.document) {
+    const webpImgTest = window.document.createElement('img');
+    webpImgTest.onload = function() {
+        exported.supportsWebp = true;
+    };
+    webpImgTest.src = 'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAQAAAAfQ//73v/+BiOh/AAA=';
+}

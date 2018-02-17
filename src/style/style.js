@@ -4,6 +4,7 @@ import assert from 'assert';
 
 import Evented from '../util/evented';
 import StyleLayer from './style_layer';
+import createStyleLayer from './create_style_layer';
 import loadSprite from './load_sprite';
 import ImageManager from '../render/image_manager';
 import GlyphManager from '../render/glyph_manager';
@@ -14,7 +15,7 @@ import { getJSON, ResourceType } from '../util/ajax';
 import { isMapboxURL, normalizeStyleURL } from '../util/mapbox';
 import browser from '../util/browser';
 import Dispatcher from '../util/dispatcher';
-import validateStyle from './validate_style';
+import validateStyle, { emitValidationErrors } from './validate_style';
 import { getType as getSourceType } from '../source/source';
 import { setType as setSourceType } from '../source/source';
 import { queryRenderedFeatures, querySourceFeatures } from '../source/query_features';
@@ -23,7 +24,7 @@ import GeoJSONSource from '../source/geojson_source';
 import styleSpec from '../style-spec/reference/latest';
 import getWorkerPool from '../util/global_worker_pool';
 import deref from '../style-spec/deref';
-import diff from '../style-spec/diff';
+import diffStyles, {operations as diffOperations} from '../style-spec/diff';
 import {
     registerForPluginAvailability,
     evented as rtlTextPluginEvented
@@ -42,7 +43,7 @@ import type {Callback} from '../types/callback';
 import type EvaluationParameters from './evaluation_parameters';
 import type Placement from '../symbol/placement';
 
-const supportedDiffOperations = pick(diff.operations, [
+const supportedDiffOperations = pick(diffOperations, [
     'addLayer',
     'removeLayer',
     'setPaintProperty',
@@ -58,7 +59,7 @@ const supportedDiffOperations = pick(diff.operations, [
     // 'setSprite',
 ]);
 
-const ignoredDiffOperations = pick(diff.operations, [
+const ignoredDiffOperations = pick(diffOperations, [
     'setCenter',
     'setZoom',
     'setBearing',
@@ -219,7 +220,7 @@ class Style extends Evented {
 
         this._layers = {};
         for (let layer of layers) {
-            layer = StyleLayer.create(layer);
+            layer = createStyleLayer(layer);
             layer.setEventedParent(this, {layer: {id: layer.id}});
             this._layers[layer.id] = layer;
         }
@@ -390,7 +391,7 @@ class Style extends Evented {
         nextState = clone(nextState);
         nextState.layers = deref(nextState.layers);
 
-        const changes = diff(this.serialize(), nextState)
+        const changes = diffStyles(this.serialize(), nextState)
             .filter(op => !(op.command in ignoredDiffOperations));
 
         if (changes.length === 0) {
@@ -537,7 +538,7 @@ class Style extends Evented {
         if (this._validate(validateStyle.layer,
             `layers.${id}`, layerObject, {arrayIndex: -1}, options)) return;
 
-        const layer = StyleLayer.create(layerObject);
+        const layer = createStyleLayer(layerObject);
         this._validateLayer(layer);
 
         layer.setEventedParent(this, {layer: {id: id}});
@@ -918,7 +919,7 @@ class Style extends Evented {
         if (options && options.validate === false) {
             return false;
         }
-        return validateStyle.emitErrors(this, validate.call(validateStyle, extend({
+        return emitValidationErrors(this, validate.call(validateStyle, extend({
             key: key,
             style: this.serialize(),
             value: value,

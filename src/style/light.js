@@ -4,7 +4,7 @@ import styleSpec from '../style-spec/reference/latest';
 
 import { endsWith, extend } from '../util/util';
 import Evented from '../util/evented';
-import validateStyle from './validate_style';
+import validateStyle, {emitValidationErrors} from './validate_style';
 import { sphericalToCartesian } from '../util/util';
 import Color from '../style-spec/util/color';
 import interpolate from '../style-spec/util/interpolate';
@@ -109,7 +109,7 @@ class Light extends Evented {
     }
 
     _validate(validate: Function, value: mixed) {
-        return validateStyle.emitErrors(this, validate.call(validateStyle, extend({
+        return emitValidationErrors(this, validate.call(validateStyle, extend({
             value: value,
             // Workaround for https://github.com/mapbox/mapbox-gl-js/issues/2407
             style: {glyphs: true, sprite: true},
