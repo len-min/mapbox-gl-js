@@ -128,7 +128,9 @@ class ImageManager {
                 response[id] = {
                     data: image.data.clone(),
                     pixelRatio: image.pixelRatio,
-                    sdf: image.sdf
+                    sdf: image.sdf,
+                    anchor_x: image.anchor_x,
+                    anchor_y: image.anchor_y
                 };
             }
         }

@@ -128,6 +128,7 @@ export function performSymbolLayout(bucket: SymbolBucket,
                 shapedIcon = shapeIcon(
                     imagePositions[feature.icon],
                     layout.get('icon-offset').evaluate(feature, {}),
+                    [image.anchor_x, image.anchor_y],
                     layout.get('icon-anchor').evaluate(feature, {}));
                 if (bucket.sdfIcons === undefined) {
                     bucket.sdfIcons = image.sdf;
