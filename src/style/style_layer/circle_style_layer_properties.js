@@ -17,6 +17,8 @@ import type Color from '../../style-spec/util/color';
 
 export type PaintProps = {|
     "circle-radius": DataDrivenProperty<number>,
+    "circle-ang0": DataDrivenProperty<number>,
+    "circle-ang1": DataDrivenProperty<number>,
     "circle-color": DataDrivenProperty<Color>,
     "circle-blur": DataDrivenProperty<number>,
     "circle-opacity": DataDrivenProperty<number>,
@@ -31,6 +33,8 @@ export type PaintProps = {|
 
 const paint: Properties<PaintProps> = new Properties({
     "circle-radius": new DataDrivenProperty(styleSpec["paint_circle"]["circle-radius"]),
+    "circle-ang0": new DataDrivenProperty(styleSpec["paint_circle"]["circle-ang0"]),
+    "circle-ang1": new DataDrivenProperty(styleSpec["paint_circle"]["circle-ang1"]),
     "circle-color": new DataDrivenProperty(styleSpec["paint_circle"]["circle-color"]),
     "circle-blur": new DataDrivenProperty(styleSpec["paint_circle"]["circle-blur"]),
     "circle-opacity": new DataDrivenProperty(styleSpec["paint_circle"]["circle-opacity"]),
